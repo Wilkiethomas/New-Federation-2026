@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEF API Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #0A1628;
+            color: #fff;
+        }
+        h1 {
+            color: #C9A227;
+        }
+        .section {
+            background: #1E3A5F;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 4px;
+            border: 1px solid #2A4A7A;
+            box-sizing: border-box;
+        }
+        input {
+            background: #0F2847;
+            color: #fff;
+        }
+        button {
+            background: #C9A227;
+            color: #0A1628;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background: #E5C766;
+        }
+        #result {
+            background: #0F2847;
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success { color: #10B981; }
+        .error { color: #EF4444; }
+    </style>
+</head>
+<body>
+    <h1>🌍 WEF API Tester</h1>
+    
+    <div class="section">
+        <h3>1. Test Health Check</h3>
+        <button onclick="testHealth()">Check API Health</button>
+    </div>
+
+    <div class="section">
+        <h3>2. Register New User</h3>
+        <input type="text" id="regName" placeholder="Full Name" value="Test User">
+        <input type="email" id="regEmail" placeholder="Email" value="test@wef.com">
+        <input type="password" id="regPassword" placeholder="Password" value="Password123">
+        <select id="regTier" style="width:100%; padding:12px; margin:8px 0; border-radius:4px; background:#0F2847; color:#fff; border:1px solid #2A4A7A;">
+            <option value="free">Free Tier</option>
+            <option value="premium">Premium Tier ($11.99/mo)</option>
+        </select>
+        <button onclick="testRegister()">Register User</button>
+    </div>
+
+    <div class="section">
+        <h3>3. Login User</h3>
+        <input type="email" id="loginEmail" placeholder="Email" value="test@wef.com">
+        <input type="password" id="loginPassword" placeholder="Password" value="Password123">
+        <button onclick="testLogin()">Login</button>
+    </div>
+
+    <div class="section">
+        <h3>4. Create a Post (requires login first)</h3>
+        <textarea id="postContent" placeholder="What's on your mind?" style="width:100%; padding:12px; margin:8px 0; border-radius:4px; background:#0F2847; color:#fff; border:1px solid #2A4A7A; min-height:80px; box-sizing:border-box;">Hello World Economic Federation! This is my first post.</textarea>
+        <button onclick="testCreatePost()">Create Post</button>
+    </div>
+
+    <div class="section">
+        <h3>5. Get Feed (requires login first)</h3>
+        <button onclick="testGetFeed()">Get My Feed</button>
+    </div>
+
+    <div class="section">
+        <h3>Result:</h3>
+        <div id="result">Click a button above to test...</div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let authToken = null;
+
+        function showResult(data, isError = false) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = isError ? 'error' : 'success';
+            resultDiv.textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function testHealth() {
+            try {
+                const res = await fetch(`${API_URL}/health`);
+                const data = await res.json();
+                showResult(data);
+            } catch (err) {
+                showResult({ error: err.message }, true);
+            }
+        }
+
+        async function testRegister() {
+            try {
+                const res = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: document.getElementById('regName').value,
+                        email: document.getElementById('regEmail').value,
+                        password: document.getElementById('regPassword').value,
+                        tier: document.getElementById('regTier').value
+                    })
+                });
+                const data = await res.json();
+                if (data.token) {
+                    authToken = data.token;
+                    showResult({ ...data, note: '✅ Token saved! You can now create posts.' });
+                } else {
+                    showResult(data, !res.ok);
+                }
+            } catch (err) {
+                showResult({ error: err.message }, true);
+            }
+        }
+
+        async function testLogin() {
+            try {
+                const res = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: document.getElementById('loginEmail').value,
+                        password: document.getElementById('loginPassword').value
+                    })
+                });
+                const data = await res.json();
+                if (data.token) {
+                    authToken = data.token;
+                    showResult({ ...data, note: '✅ Token saved! You can now create posts.' });
+                } else {
+                    showResult(data, !res.ok);
+                }
+            } catch (err) {
+                showResult({ error: err.message }, true);
+            }
+        }
+
+        async function testCreatePost() {
+            if (!authToken) {
+                showResult({ error: 'Please login or register first!' }, true);
+                return;
+            }
+            try {
+                const res = await fetch(`${API_URL}/posts`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        content: document.getElementById('postContent').value
+                    })
+                });
+                const data = await res.json();
+                showResult(data, !res.ok);
+            } catch (err) {
+                showResult({ error: err.message }, true);
+            }
+        }
+
+        async function testGetFeed() {
+            if (!authToken) {
+                showResult({ error: 'Please login or register first!' }, true);
+                return;
+            }
+            try {
+                const res = await fetch(`${API_URL}/posts/feed`, {
+                    headers: { 
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                const data = await res.json();
+                showResult(data, !res.ok);
+            } catch (err) {
+                showResult({ error: err.message }, true);
+            }
+        }
+    </script>
+</body>
+</html>
