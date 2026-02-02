@@ -1,14 +1,15 @@
 /**
- * World Economic Federation - Backend API Server
- * Main entry point for the Node.js/Express application
+ * World Economic Federation - Main Server
+ * Serves both API and Frontend
  */
 
 require('dotenv').config();
 const express = require('express');
+const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const mongoose = require('mongoose');
+const path = require('path');
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -21,24 +22,24 @@ const paymentRoutes = require('./routes/payments');
 const app = express();
 
 // ===================
-// MIDDLEWARE
+// SECURITY MIDDLEWARE
 // ===================
 
-// Security headers
-app.use(helmet());
-
-// CORS - Allow frontend to communicate with backend
-app.use(cors({
-  origin: '*',
-  credentials: true
+// Helmet for security headers (configured for serving frontend)
+app.use(helmet({
+  contentSecurityPolicy: false, // Disable CSP for now to allow inline scripts
+  crossOriginEmbedderPolicy: false
 }));
 
+// CORS configuration
+app.use(cors({
+  origin: process.env.FRONTEND_URL || '*',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-// Parse JSON bodies
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
-
-// Rate limiting - prevent abuse
+// Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
@@ -47,15 +48,22 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 // ===================
-// DATABASE CONNECTION
+// BODY PARSING
 // ===================
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/wef_platform', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('✅ Connected to MongoDB'))
-.catch(err => console.error('❌ MongoDB connection error:', err));
+// Special handling for Stripe webhooks (needs raw body)
+app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
+
+// JSON parsing for all other routes
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// ===================
+// STATIC FILES (Frontend)
+// ===================
+
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // ===================
 // API ROUTES
@@ -70,46 +78,55 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Authentication routes (register, login, logout, password reset)
+// API routes
 app.use('/api/auth', authRoutes);
-
-// User routes (profile, settings, followers)
 app.use('/api/users', userRoutes);
-
-// Post routes (create, read, update, delete, like, comment)
 app.use('/api/posts', postRoutes);
-
-// Group routes (create, join, leave, manage)
 app.use('/api/groups', groupRoutes);
-
-// Campaign/Crowdfunding routes
 app.use('/api/campaigns', campaignRoutes);
-
-// Payment routes (Stripe integration)
 app.use('/api/payments', paymentRoutes);
+
+// API 404 handler
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ error: 'Endpoint not found' });
+});
+
+// ===================
+// FRONTEND ROUTES
+// ===================
+
+// Serve frontend for all non-API routes (SPA support)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // ===================
 // ERROR HANDLING
 // ===================
 
-// 404 handler
-app.use((req, res, next) => {
-  res.status(404).json({ error: 'Endpoint not found' });
-});
-
 // Global error handler
 app.use((err, req, res, next) => {
-  console.error('Error:', err.stack);
+  console.error('Error:', err);
   
   // Mongoose validation error
   if (err.name === 'ValidationError') {
-    const messages = Object.values(err.errors).map(e => e.message);
-    return res.status(400).json({ error: messages.join(', ') });
+    const errors = Object.values(err.errors).map(e => e.message);
+    return res.status(400).json({ error: 'Validation failed', details: errors });
   }
   
-  // JWT error
+  // Mongoose duplicate key error
+  if (err.code === 11000) {
+    const field = Object.keys(err.keyValue)[0];
+    return res.status(400).json({ error: `${field} already exists` });
+  }
+  
+  // JWT errors
   if (err.name === 'JsonWebTokenError') {
     return res.status(401).json({ error: 'Invalid token' });
+  }
+  
+  if (err.name === 'TokenExpiredError') {
+    return res.status(401).json({ error: 'Token expired' });
   }
   
   // Default error
@@ -121,18 +138,37 @@ app.use((err, req, res, next) => {
 });
 
 // ===================
+// DATABASE CONNECTION
+// ===================
+
+const connectDB = async () => {
+  try {
+    const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/wef_platform';
+    await mongoose.connect(mongoURI);
+    console.log('✅ Connected to MongoDB');
+  } catch (error) {
+    console.error('❌ MongoDB connection error:', error.message);
+    process.exit(1);
+  }
+};
+
+// ===================
 // START SERVER
 // ===================
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`
-🌍 World Economic Federation API Server
-📡 Running on port ${PORT}
-🔗 http://localhost:${PORT}
-📊 Environment: ${process.env.NODE_ENV || 'development'}
-  `);
-});
+const startServer = async () => {
+  await connectDB();
+  
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🌐 Frontend: http://localhost:${PORT}`);
+    console.log(`🔌 API: http://localhost:${PORT}/api`);
+  });
+};
+
+startServer();
 
 module.exports = app;

@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Economic Federation</title>
+    <link rel="icon" type="image/png" href="wef-logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* New colors from WEF logo */
+            --primary: #062543;
+            --primary-light: #0a3a5c;
+            --secondary: #0077B6;
+            --secondary-light: #0096e0;
+            --accent: #4CAF50;
+            --accent-light: #6abf6e;
+            --text: #FFFFFF;
+            --text-muted: #a0c4d9;
+            --surface: #083254;
+            --surface-light: #0a4068;
+            --border: #1a5a7a;
+            --success: #4CAF50;
+            --error: #EF4444;
+            --gradient-blue: linear-gradient(135deg, #0077B6 0%, #00a8e8 100%);
+            --gradient-green: linear-gradient(135deg, #4CAF50 0%, #6abf6e 100%);
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* =================== */
+        /* LANDING PAGE */
+        /* =================== */
+        .landing-page {
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%);
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 64px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(6, 37, 67, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo {
+            height: 45px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--text);
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary-light);
+        }
+
+        .btn-outline:hover {
+            background: var(--secondary);
+            color: var(--text);
+        }
+
+        .btn-primary {
+            background: var(--gradient-green);
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--secondary);
+            color: var(--secondary-light);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 64px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, rgba(0, 119, 182, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero-logo {
+            height: 80px;
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-green);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-top: 80px;
+            padding-top: 60px;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--secondary-light);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 8px;
+        }
+
+        /* Features */
+        .features {
+            padding: 100px 64px;
+            background: var(--surface);
+        }
+
+        .section-title {
+            font-size: 40px;
+            text-align: center;
+            margin-bottom: 60px;
+            font-weight: 600;
+        }
+
+        .section-title span {
+            color: var(--accent);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--surface-light);
+            padding: 36px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--secondary);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-blue);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 100px 64px;
+            background: var(--primary);
+        }
+
+        .pricing-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: -44px;
+            margin-bottom: 60px;
+            font-size: 16px;
+        }
+
+        .pricing-cards {
+            display: flex;
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+            justify-content: center;
+        }
+
+        .pricing-card {
+            background: var(--surface);
+            padding: 44px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--accent);
+            position: relative;
+            background: linear-gradient(180deg, var(--surface-light) 0%, var(--surface) 100%);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-green);
+            color: var(--text);
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .pricing-tier {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .pricing-card.featured .pricing-tier {
+            color: var(--accent);
+        }
+
+        .pricing-price {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .pricing-price span {
+            font-size: 18px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .pricing-period {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            font-size: 14px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features li {
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .pricing-card.featured .pricing-features li::before {
+            color: var(--accent);
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 64px;
+            border-top: 1px solid var(--border);
+            background: var(--primary);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 80px;
+        }
+
+        .footer-column h4 {
+            color: var(--secondary-light);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .footer-column a {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 12px;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--text);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+            padding-top: 24px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* =================== */
+        /* AUTH MODAL */
+        /* =================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal {
+            background: var(--surface);
+            padding: 48px;
+            border-radius: 16px;
+            width: 440px;
+            border: 1px solid var(--border);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .modal-logo {
+            height: 50px;
+            margin-bottom: 20px;
+        }
+
+        .modal h2 {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .modal p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 15px;
+            font-family: 'Open Sans', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .form-group input::placeholder {
+            color: #5a8aa8;
+        }
+
+        .tier-selector {
+            display: flex;
+            gap: 12px;
+        }
+
+        .tier-option {
+            flex: 1;
+            padding: 16px;
+            background: transparent;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            color: var(--text);
+            text-align: center;
+            transition: all 0.3s;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .tier-option:hover {
+            border-color: var(--secondary);
+        }
+
+        .tier-option.selected {
+            background: var(--surface-light);
+            border-color: var(--accent);
+        }
+
+        .tier-option .tier-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .tier-option.selected .tier-name {
+            color: var(--accent);
+        }
+
+        .tier-option .tier-price {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .modal .btn {
+            width: 100%;
+            margin-bottom: 16px;
+            padding: 14px;
+        }
+
+        .modal-footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .modal-footer button {
+            background: none;
+            border: none;
+            color: var(--secondary-light);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .modal-footer button:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        /* =================== */
+        /* DASHBOARD */
+        /* =================== */
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar-logo {
+            height: 36px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+        }
+
+        .nav-item {
+            width: 100%;
+            padding: 14px 24px;
+            background: transparent;
+            border: none;
+            border-left: 3px solid transparent;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            font-size: 15px;
+            text-align: left;
+            transition: all 0.2s;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .nav-item:hover {
+            background: var(--surface-light);
+            color: var(--text);
+        }
+
+        .nav-item.active {
+            background: var(--surface-light);
+            border-left-color: var(--accent);
+            color: var(--text);
+        }
+
+        .nav-item-icon {
+            font-size: 20px;
+        }
+
+        .sidebar-user {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            background: var(--gradient-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-tier {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .user-tier.premium {
+            color: var(--accent);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            overflow: auto;
+            background: var(--primary);
+        }
+
+        .main-header {
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .main-header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 10px 16px 10px 42px;
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 14px;
+            width: 280px;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .search-box input::placeholder {
+            color: #5a8aa8;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .btn-signout {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: 'Open Sans', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .btn-signout:hover {
+            border-color: var(--secondary);
+            color: var(--text);
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 32px;
+        }
+
+        /* Feed */
+        .feed {
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        /* Create Post */
+        .create-post {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .create-post-top {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .create-post textarea {
+            flex: 1;
+            padding: 14px;
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 15px;
+            resize: none;
+            min-height: 80px;
+            font-family: 'Open Sans', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        .create-post textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .create-post textarea::placeholder {
+            color: #5a8aa8;
+        }
+
+        .create-post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .post-options {
+            display: flex;
+            gap: 8px;
+        }
+
+        .post-option {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .post-option:hover {
+            border-color: var(--secondary);
+            color: var(--text);
+        }
+
+        /* Post Card */
+        .post-card {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            transition: border-color 0.3s;
+        }
+
+        .post-card:hover {
+            border-color: var(--secondary);
+        }
+
+        .post-header {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .post-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .post-author-name {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .post-meta {
+            color: var(--text-muted);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .post-content {
+            line-height: 1.7;
+            margin-bottom: 16px;
+            font-size: 15px;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-action {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .post-action:hover {
+            color: var(--text);
+        }
+
+        .post-action.liked {
+            color: var(--accent);
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        /* Hide elements */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .nav {
+                padding: 16px 32px;
+            }
+            .hero {
+                padding: 60px 32px;
+            }
+            .hero h1 {
+                font-size: 40px;
+            }
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .stats {
+                gap: 40px;
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links .nav-link {
+                display: none;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .pricing-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            .footer-content {
+                flex-direction: column;
+                gap: 40px;
+            }
+            .footer-links {
+                gap: 40px;
+            }
+            .sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- App Container -->
+    <div id="app">
+        <!-- Landing Page -->
+        <div id="landing-page" class="landing-page">
+            <nav class="nav">
+                <div class="nav-brand">
+                    <img src="wef-logo.png" alt="World Economic Federation" class="nav-logo">
+                </div>
+                <div class="nav-links">
+                    <a href="#" class="nav-link">About</a>
+                    <a href="#features" class="nav-link">Features</a>
+                    <a href="#" class="nav-link">Community</a>
+                    <button class="btn btn-outline" onclick="showAuthModal('login')">Sign In</button>
+                    <button class="btn btn-primary" onclick="showAuthModal('register')">Join Now</button>
+                </div>
+            </nav>
+
+            <section class="hero">
+                <div class="hero-glow"></div>
+                <img src="wef-logo.png" alt="World Economic Federation" class="hero-logo">
+                <h1>
+                    Shaping the Future of<br>
+                    <span>Global Economics</span>
+                </h1>
+                <p>Connect with thought leaders, participate in groundbreaking research, and drive positive economic change through our global network.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="showAuthModal('register')">Get Started Free</button>
+                    <button class="btn btn-secondary">Watch Demo</button>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-number">250K+</div>
+                        <div class="stat-label">Active Members</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">180+</div>
+                        <div class="stat-label">Countries</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">$45M+</div>
+                        <div class="stat-label">Funds Raised</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">5K+</div>
+                        <div class="stat-label">Active Groups</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="features" id="features">
+                <h2 class="section-title">Everything You Need to <span>Make an Impact</span></h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📡</div>
+                        <h3>Social Feed</h3>
+                        <p>Share insights, publish research, and engage with a global community of economic thinkers and policy makers.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👥</div>
+                        <h3>Professional Groups</h3>
+                        <p>Join or create specialized groups to collaborate on topics ranging from fintech to sustainable development.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💰</div>
+                        <h3>Crowdfunding</h3>
+                        <p>Launch or support initiatives that drive real economic change in communities around the world.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Research Hub</h3>
+                        <p>Access cutting-edge economic research and data from institutions and experts worldwide.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Events & Webinars</h3>
+                        <p>Attend virtual summits, workshops, and networking events with industry leaders.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🏆</div>
+                        <h3>Premium Access</h3>
+                        <p>Unlock exclusive content, priority support, and entry to member-only sweepstakes.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pricing">
+                <h2 class="section-title">Choose Your <span>Membership</span></h2>
+                <p class="pricing-subtitle">Start free and upgrade when you're ready for more</p>
+                <div class="pricing-cards">
+                    <div class="pricing-card">
+                        <div class="pricing-tier">Free</div>
+                        <div class="pricing-price">$0</div>
+                        <div class="pricing-period">Forever free</div>
+                        <ul class="pricing-features">
+                            <li>Access to social feed</li>
+                            <li>Join up to 5 groups</li>
+                            <li>Basic crowdfunding</li>
+                            <li>Community support</li>
+                        </ul>
+                        <button class="btn btn-secondary" onclick="showAuthModal('register')">Get Started</button>
+                    </div>
+                    <div class="pricing-card featured">
+                        <div class="pricing-badge">POPULAR</div>
+                        <div class="pricing-tier">Premium</div>
+                        <div class="pricing-price">$11.99<span>/mo</span></div>
+                        <div class="pricing-period">Billed monthly</div>
+                        <ul class="pricing-features">
+                            <li>Everything in Free</li>
+                            <li>Unlimited groups</li>
+                            <li>Advanced crowdfunding tools</li>
+                            <li>Priority support</li>
+                            <li>Exclusive sweepstakes access</li>
+                            <li>Research & data access</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="showAuthModal('register')">Start Premium</button>
+                    </div>
+                </div>
+            </section>
+
+            <footer>
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <img src="wef-logo.png" alt="World Economic Federation" class="footer-logo">
+                        <p>Empowering global economic progress through collaboration and innovation.</p>
+                    </div>
+                    <div class="footer-links">
+                        <div class="footer-column">
+                            <h4>Platform</h4>
+                            <a href="#">Features</a>
+                            <a href="#">Pricing</a>
+                            <a href="#">Groups</a>
+                            <a href="#">Crowdfunding</a>
+                        </div>
+                        <div class="footer-column">
+                            <h4>Company</h4>
+                            <a href="#">About</a>
+                            <a href="#">Careers</a>
+                            <a href="#">Press</a>
+                            <a href="#">Contact</a>
+                        </div>
+                        <div class="footer-column">
+                            <h4>Legal</h4>
+                            <a href="#">Privacy</a>
+                            <a href="#">Terms</a>
+                            <a href="#">Security</a>
+                            <a href="#">Cookies</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    © 2025 World Economic Federation. All rights reserved.
+                </div>
+            </footer>
+        </div>
+
+        <!-- Auth Modal -->
+        <div id="auth-modal" class="modal-overlay hidden">
+            <div class="modal">
+                <div class="modal-header">
+                    <img src="wef-logo.png" alt="WEF" class="modal-logo">
+                    <h2 id="auth-title">Welcome Back</h2>
+                    <p id="auth-subtitle">Sign in to your account</p>
+                </div>
+                <div id="auth-error" class="error-message hidden"></div>
+                <form id="auth-form" onsubmit="handleAuth(event)">
+                    <div id="name-field" class="form-group hidden">
+                        <label>Full Name</label>
+                        <input type="text" id="auth-name" placeholder="John Smith">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="auth-email" placeholder="you@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="auth-password" placeholder="••••••••" required>
+                    </div>
+                    <div id="tier-field" class="form-group hidden">
+                        <label>Membership Tier</label>
+                        <div class="tier-selector">
+                            <button type="button" class="tier-option selected" data-tier="free" onclick="selectTier('free')">
+                                <div class="tier-name">Free</div>
+                                <div class="tier-price">$0/month</div>
+                            </button>
+                            <button type="button" class="tier-option" data-tier="premium" onclick="selectTier('premium')">
+                                <div class="tier-name">Premium</div>
+                                <div class="tier-price">$11.99/month</div>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="auth-submit">Sign In</button>
+                </form>
+                <div class="modal-footer">
+                    <span id="auth-switch-text">Don't have an account?</span>
+                    <button onclick="toggleAuthMode()" id="auth-switch-btn">Sign Up</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard hidden">
+            <aside class="sidebar">
+                <div class="sidebar-brand">
+                    <img src="wef-logo.png" alt="WEF" class="sidebar-logo">
+                </div>
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" data-section="feed" onclick="showSection('feed')">
+                        <span class="nav-item-icon">🏠</span> Feed
+                    </button>
+                    <button class="nav-item" data-section="groups" onclick="showSection('groups')">
+                        <span class="nav-item-icon">👥</span> Groups
+                    </button>
+                    <button class="nav-item" data-section="crowdfunding" onclick="showSection('crowdfunding')">
+                        <span class="nav-item-icon">💰</span> Crowdfunding
+                    </button>
+                    <button class="nav-item" data-section="messages" onclick="showSection('messages')">
+                        <span class="nav-item-icon">💬</span> Messages
+                    </button>
+                    <button class="nav-item" data-section="notifications" onclick="showSection('notifications')">
+                        <span class="nav-item-icon">🔔</span> Notifications
+                    </button>
+                    <button class="nav-item" data-section="profile" onclick="showSection('profile')">
+                        <span class="nav-item-icon">👤</span> Profile
+                    </button>
+                    <button class="nav-item" data-section="settings" onclick="showSection('settings')">
+                        <span class="nav-item-icon">⚙️</span> Settings
+                    </button>
+                </nav>
+                <div class="sidebar-user">
+                    <div class="user-avatar" id="user-avatar">AT</div>
+                    <div class="user-info">
+                        <div class="user-name" id="user-name">User</div>
+                        <div class="user-tier" id="user-tier">Free Tier</div>
+                    </div>
+                </div>
+            </aside>
+            <main class="main-content">
+                <header class="main-header">
+                    <h1 id="section-title">Feed</h1>
+                    <div class="header-actions">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" placeholder="Search...">
+                        </div>
+                        <button class="btn-signout" onclick="signOut()">Sign Out</button>
+                    </div>
+                </header>
+                <div class="content-area">
+                    <!-- Feed Section -->
+                    <div id="section-feed" class="feed">
+                        <div class="create-post">
+                            <div class="create-post-top">
+                                <div class="user-avatar" id="post-avatar">AT</div>
+                                <textarea id="new-post-content" placeholder="Share your insights with the community..."></textarea>
+                            </div>
+                            <div class="create-post-actions">
+                                <div class="post-options">
+                                    <button class="post-option">📷 Photo</button>
+                                    <button class="post-option">🎥 Video</button>
+                                    <button class="post-option">📊 Poll</button>
+                                </div>
+                                <button class="btn btn-primary" onclick="createPost()">Post</button>
+                            </div>
+                        </div>
+                        <div id="posts-container">
+                            <div class="loading">
+                                <div class="loading-spinner"></div>
+                                Loading posts...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Other Sections (Placeholders) -->
+                    <div id="section-groups" class="hidden">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">👥</div>
+                            <h3>Groups</h3>
+                            <p>Coming soon! Group features are under development.</p>
+                        </div>
+                    </div>
+                    <div id="section-crowdfunding" class="hidden">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">💰</div>
+                            <h3>Crowdfunding</h3>
+                            <p>Coming soon! Crowdfunding features are under development.</p>
+                        </div>
+                    </div>
+                    <div id="section-messages" class="hidden">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">💬</div>
+                            <h3>Messages</h3>
+                            <p>Your conversations will appear here.</p>
+                        </div>
+                    </div>
+                    <div id="section-notifications" class="hidden">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🔔</div>
+                            <h3>Notifications</h3>
+                            <p>You're all caught up!</p>
+                        </div>
+                    </div>
+                    <div id="section-profile" class="hidden">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">👤</div>
+                            <h3>Profile</h3>
+                            <p>Profile page coming soon!</p>
+                        </div>
+                    </div>
+                    <div id="section-settings" class="hidden">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">⚙️</div>
+                            <h3>Settings</h3>
+                            <p>Settings page coming soon!</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // =================== 
+        // API Configuration
+        // ===================
+        const API_URL = 'http://localhost:5000/api';
+        
+        // =================== 
+        // State
+        // ===================
+        let currentUser = null;
+        let authToken = localStorage.getItem('wef_token');
+        let authMode = 'login';
+        let selectedTier = 'free';
+        let posts = [];
+
+        // =================== 
+        // Initialize
+        // ===================
+        document.addEventListener('DOMContentLoaded', () => {
+            if (authToken) {
+                fetchCurrentUser();
+            }
+        });
+
+        // =================== 
+        // API Functions
+        // ===================
+        async function apiCall(endpoint, options = {}) {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+            
+            if (authToken) {
+                headers['Authorization'] = `Bearer ${authToken}`;
+            }
+            
+            const response = await fetch(`${API_URL}${endpoint}`, {
+                ...options,
+                headers
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error || 'Something went wrong');
+            }
+            
+            return data;
+        }
+
+        async function fetchCurrentUser() {
+            try {
+                const data = await apiCall('/auth/me');
+                currentUser = data.user;
+                showDashboard();
+                loadFeed();
+            } catch (error) {
+                console.error('Session expired:', error);
+                localStorage.removeItem('wef_token');
+                authToken = null;
+            }
+        }
+
+        async function register(name, email, password, tier) {
+            const data = await apiCall('/auth/register', {
+                method: 'POST',
+                body: JSON.stringify({ name, email, password, tier })
+            });
+            return data;
+        }
+
+        async function login(email, password) {
+            const data = await apiCall('/auth/login', {
+                method: 'POST',
+                body: JSON.stringify({ email, password })
+            });
+            return data;
+        }
+
+        async function loadFeed() {
+            try {
+                const data = await apiCall('/posts/feed');
+                posts = data.posts || [];
+                renderPosts();
+            } catch (error) {
+                console.error('Load feed error:', error);
+                document.getElementById('posts-container').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <h3>No posts yet</h3>
+                        <p>Be the first to share something!</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function createPost() {
+            const content = document.getElementById('new-post-content').value.trim();
+            if (!content) return;
+            
+            try {
+                const data = await apiCall('/posts', {
+                    method: 'POST',
+                    body: JSON.stringify({ content })
+                });
+                
+                posts.unshift(data.post);
+                renderPosts();
+                document.getElementById('new-post-content').value = '';
+            } catch (error) {
+                alert('Failed to create post: ' + error.message);
+            }
+        }
+
+        async function likePost(postId) {
+            try {
+                const data = await apiCall(`/posts/${postId}/like`, {
+                    method: 'POST'
+                });
+                
+                const post = posts.find(p => p.id === postId);
+                if (post) {
+                    post.liked = data.liked;
+                    post.likeCount = data.likeCount;
+                    renderPosts();
+                }
+            } catch (error) {
+                console.error('Like error:', error);
+            }
+        }
+
+        // =================== 
+        // UI Functions
+        // ===================
+        function showAuthModal(mode) {
+            authMode = mode;
+            const modal = document.getElementById('auth-modal');
+            const title = document.getElementById('auth-title');
+            const subtitle = document.getElementById('auth-subtitle');
+            const nameField = document.getElementById('name-field');
+            const tierField = document.getElementById('tier-field');
+            const submitBtn = document.getElementById('auth-submit');
+            const switchText = document.getElementById('auth-switch-text');
+            const switchBtn = document.getElementById('auth-switch-btn');
+            const errorDiv = document.getElementById('auth-error');
+            
+            errorDiv.classList.add('hidden');
+            
+            if (mode === 'register') {
+                title.textContent = 'Join the Federation';
+                subtitle.textContent = 'Create your account to get started';
+                nameField.classList.remove('hidden');
+                tierField.classList.remove('hidden');
+                submitBtn.textContent = 'Create Account';
+                switchText.textContent = "Already have an account?";
+                switchBtn.textContent = 'Sign In';
+            } else {
+                title.textContent = 'Welcome Back';
+                subtitle.textContent = 'Sign in to your account';
+                nameField.classList.add('hidden');
+                tierField.classList.add('hidden');
+                submitBtn.textContent = 'Sign In';
+                switchText.textContent = "Don't have an account?";
+                switchBtn.textContent = 'Sign Up';
+            }
+            
+            modal.classList.remove('hidden');
+        }
+
+        function hideAuthModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
+            document.getElementById('auth-form').reset();
+            document.getElementById('auth-error').classList.add('hidden');
+        }
+
+        function toggleAuthMode() {
+            showAuthModal(authMode === 'login' ? 'register' : 'login');
+        }
+
+        function selectTier(tier) {
+            selectedTier = tier;
+            document.querySelectorAll('.tier-option').forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.tier === tier);
+            });
+        }
+
+        async function handleAuth(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            const errorDiv = document.getElementById('auth-error');
+            
+            try {
+                errorDiv.classList.add('hidden');
+                
+                let data;
+                if (authMode === 'register') {
+                    const name = document.getElementById('auth-name').value;
+                    if (!name) {
+                        throw new Error('Please enter your name');
+                    }
+                    data = await register(name, email, password, selectedTier);
+                } else {
+                    data = await login(email, password);
+                }
+                
+                authToken = data.token;
+                localStorage.setItem('wef_token', authToken);
+                currentUser = data.user;
+                
+                hideAuthModal();
+                showDashboard();
+                loadFeed();
+                
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('landing-page').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            
+            if (currentUser) {
+                const initials = currentUser.name
+                    .split(' ')
+                    .map(n => n[0])
+                    .join('')
+                    .toUpperCase()
+                    .slice(0, 2);
+                
+                document.getElementById('user-avatar').textContent = initials;
+                document.getElementById('post-avatar').textContent = initials;
+                document.getElementById('user-name').textContent = currentUser.name;
+                
+                const tierEl = document.getElementById('user-tier');
+                if (currentUser.tier === 'premium') {
+                    tierEl.textContent = '★ Premium';
+                    tierEl.classList.add('premium');
+                } else {
+                    tierEl.textContent = 'Free Tier';
+                    tierEl.classList.remove('premium');
+                }
+            }
+        }
+
+        function showLanding() {
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('landing-page').classList.remove('hidden');
+        }
+
+        function signOut() {
+            authToken = null;
+            currentUser = null;
+            localStorage.removeItem('wef_token');
+            showLanding();
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.section === section);
+            });
+            
+            document.getElementById('section-title').textContent = section.charAt(0).toUpperCase() + section.slice(1);
+            
+            document.querySelectorAll('[id^="section-"]').forEach(el => {
+                el.classList.add('hidden');
+            });
+            document.getElementById(`section-${section}`).classList.remove('hidden');
+        }
+
+        function renderPosts() {
+            const container = document.getElementById('posts-container');
+            
+            if (posts.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <h3>No posts yet</h3>
+                        <p>Be the first to share something!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = posts.map(post => `
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-avatar">${getInitials(post.author?.name || 'User')}</div>
+                        <div>
+                            <div class="post-author-name">${post.author?.name || 'User'}</div>
+                            <div class="post-meta">
+                                <span>${post.author?.role || 'Member'}</span>
+                                <span>•</span>
+                                <span>${formatTime(post.createdAt)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">${escapeHtml(post.content)}</div>
+                    <div class="post-actions">
+                        <button class="post-action ${post.liked ? 'liked' : ''}" onclick="likePost('${post.id}')">
+                            ${post.liked ? '❤️' : '🤍'} ${post.likeCount || 0}
+                        </button>
+                        <button class="post-action">💬 ${post.commentCount || 0}</button>
+                        <button class="post-action">🔄 ${post.shareCount || 0}</button>
+                        <button class="post-action" style="margin-left:auto">🔖</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // =================== 
+        // Helpers
+        // ===================
+        function getInitials(name) {
+            return name
+                .split(' ')
+                .map(n => n[0])
+                .join('')
+                .toUpperCase()
+                .slice(0, 2);
+        }
+
+        function formatTime(dateString) {
+            if (!dateString) return 'Just now';
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            if (diffDays < 7) return `${diffDays}d ago`;
+            return date.toLocaleDateString();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('auth-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'auth-modal') {
+                hideAuthModal();
+            }
+        });
+    </script>
+</body>
+</html>
