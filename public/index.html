@@ -1045,6 +1045,347 @@
                 display: none;
             }
         }
+        /* Groups & Crowdfunding Styles */
+        .groups-header, .crowdfunding-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding: 0 32px;
+        }
+
+        .groups-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .groups-tab {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: 'Open Sans', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .groups-tab:hover {
+            border-color: var(--secondary);
+            color: var(--text);
+        }
+
+        .groups-tab.active {
+            background: var(--secondary);
+            border-color: var(--secondary);
+            color: var(--text);
+        }
+
+        .groups-content, .campaigns-content {
+            padding: 0 32px;
+        }
+
+        .groups-search {
+            margin-bottom: 20px;
+        }
+
+        .groups-search input {
+            width: 100%;
+            padding: 14px 20px;
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .groups-search input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .groups-categories, .campaigns-categories {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: var(--secondary);
+            border-color: var(--secondary);
+            color: var(--text);
+        }
+
+        .groups-grid, .campaigns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .group-card, .campaign-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .group-card:hover, .campaign-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--secondary);
+        }
+
+        .group-cover, .campaign-cover {
+            height: 120px;
+            background: var(--gradient-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .group-cover img, .campaign-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .group-info, .campaign-info {
+            padding: 20px;
+        }
+
+        .group-name, .campaign-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .group-description, .campaign-description {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .group-stats, .campaign-stats {
+            display: flex;
+            gap: 16px;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+
+        .group-actions, .campaign-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-join, .btn-donate {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: 'Open Sans', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .btn-join {
+            background: var(--secondary);
+            border: none;
+            color: var(--text);
+        }
+
+        .btn-join:hover {
+            background: var(--secondary-light);
+        }
+
+        .btn-join.joined {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        .btn-view {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-view:hover {
+            border-color: var(--secondary);
+        }
+
+        /* Campaign specific */
+        .campaign-progress {
+            margin-bottom: 16px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--surface-light);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-green);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        .progress-raised {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .progress-goal {
+            color: var(--text-muted);
+        }
+
+        .btn-donate {
+            background: var(--accent);
+            border: none;
+            color: var(--text);
+        }
+
+        .btn-donate:hover {
+            background: var(--accent-light);
+        }
+
+        /* Modal for Create Group/Campaign */
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 12px 16px;
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 14px;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Group Detail View */
+        .group-detail {
+            padding: 0 32px;
+        }
+
+        .group-detail-header {
+            background: var(--surface);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .group-detail-cover {
+            height: 200px;
+            background: var(--gradient-blue);
+        }
+
+        .group-detail-info {
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .group-detail-name {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .group-detail-meta {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .group-posts {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--secondary);
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 0;
+        }
+
+        .back-btn:hover {
+            color: var(--secondary-light);
+        }
     </style>
 </head>
 <body>
@@ -1247,6 +1588,126 @@
             </div>
         </div>
 
+        <!-- Create Group Modal -->
+        <div id="create-group-modal" class="modal-overlay hidden">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2>Create a Group</h2>
+                    <p>Build a community around shared interests</p>
+                </div>
+                <div id="group-error" class="error-message hidden"></div>
+                <form id="create-group-form" class="modal-form" onsubmit="handleCreateGroup(event)">
+                    <div class="form-group">
+                        <label>Group Name</label>
+                        <input type="text" id="group-name" placeholder="e.g., Sustainable Tech Innovators" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="group-description" placeholder="What's this group about?" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="group-category" required>
+                            <option value="">Select a category</option>
+                            <option value="Technology & Innovation">Technology & Innovation</option>
+                            <option value="Sustainable Finance">Sustainable Finance</option>
+                            <option value="Social Impact">Social Impact</option>
+                            <option value="Policy & Governance">Policy & Governance</option>
+                            <option value="Education & Research">Education & Research</option>
+                            <option value="Health & Wellbeing">Health & Wellbeing</option>
+                            <option value="Environment & Climate">Environment & Climate</option>
+                            <option value="Business & Economics">Business & Economics</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Privacy</label>
+                        <select id="group-privacy">
+                            <option value="public">Public - Anyone can see and join</option>
+                            <option value="private">Private - Requires approval to join</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button type="button" class="btn btn-outline" onclick="hideCreateGroupModal()" style="flex:1">Cancel</button>
+                        <button type="submit" class="btn btn-primary" style="flex:1">Create Group</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Create Campaign Modal -->
+        <div id="create-campaign-modal" class="modal-overlay hidden">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2>Start a Campaign</h2>
+                    <p>Raise funds for your cause</p>
+                </div>
+                <div id="campaign-error" class="error-message hidden"></div>
+                <form id="create-campaign-form" class="modal-form" onsubmit="handleCreateCampaign(event)">
+                    <div class="form-group">
+                        <label>Campaign Title</label>
+                        <input type="text" id="campaign-title" placeholder="e.g., Clean Water for Village Schools" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="campaign-description" placeholder="Tell your story. Why does this matter?" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="campaign-category" required>
+                            <option value="">Select a category</option>
+                            <option value="Environment">Environment</option>
+                            <option value="Education">Education</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Community">Community</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Arts & Culture">Arts & Culture</option>
+                            <option value="Emergency Relief">Emergency Relief</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Funding Goal (USD)</label>
+                        <input type="number" id="campaign-goal" placeholder="10000" min="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="campaign-end-date" required>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button type="button" class="btn btn-outline" onclick="hideCreateCampaignModal()" style="flex:1">Cancel</button>
+                        <button type="submit" class="btn btn-primary" style="flex:1">Create Campaign</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Donate Modal -->
+        <div id="donate-modal" class="modal-overlay hidden">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2>Support this Campaign</h2>
+                    <p id="donate-campaign-title"></p>
+                </div>
+                <div id="donate-error" class="error-message hidden"></div>
+                <form id="donate-form" class="modal-form" onsubmit="handleDonate(event)">
+                    <input type="hidden" id="donate-campaign-id">
+                    <div class="form-group">
+                        <label>Donation Amount (USD)</label>
+                        <input type="number" id="donate-amount" placeholder="50" min="1" required>
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                        <button type="button" class="btn btn-outline" onclick="setDonationAmount(25)">$25</button>
+                        <button type="button" class="btn btn-outline" onclick="setDonationAmount(50)">$50</button>
+                        <button type="button" class="btn btn-outline" onclick="setDonationAmount(100)">$100</button>
+                        <button type="button" class="btn btn-outline" onclick="setDonationAmount(250)">$250</button>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button type="button" class="btn btn-outline" onclick="hideDonateModal()" style="flex:1">Cancel</button>
+                        <button type="submit" class="btn btn-primary" style="flex:1; background: var(--accent);">Donate Now</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Dashboard -->
         <div id="dashboard" class="dashboard hidden">
             <aside class="sidebar">
@@ -1320,19 +1781,70 @@
                         </div>
                     </div>
 
-                    <!-- Other Sections (Placeholders) -->
+                    <!-- Groups Section -->
                     <div id="section-groups" class="hidden">
-                        <div class="empty-state">
-                            <div class="empty-state-icon">👥</div>
-                            <h3>Groups</h3>
-                            <p>Coming soon! Group features are under development.</p>
+                        <div class="groups-header">
+                            <div class="groups-tabs">
+                                <button class="groups-tab active" onclick="showGroupsTab('discover')">Discover</button>
+                                <button class="groups-tab" onclick="showGroupsTab('my-groups')">My Groups</button>
+                            </div>
+                            <button class="btn btn-primary" onclick="showCreateGroupModal()">+ Create Group</button>
+                        </div>
+                        
+                        <div id="groups-discover" class="groups-content">
+                            <div class="groups-search">
+                                <input type="text" id="groups-search-input" placeholder="Search groups..." onkeyup="searchGroups(event)">
+                            </div>
+                            <div class="groups-categories">
+                                <button class="category-btn active" onclick="filterGroups('all')">All</button>
+                                <button class="category-btn" onclick="filterGroups('Technology & Innovation')">Technology</button>
+                                <button class="category-btn" onclick="filterGroups('Sustainable Finance')">Finance</button>
+                                <button class="category-btn" onclick="filterGroups('Social Impact')">Social Impact</button>
+                                <button class="category-btn" onclick="filterGroups('Policy & Governance')">Policy</button>
+                            </div>
+                            <div id="groups-list" class="groups-grid">
+                                <!-- Groups will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div id="groups-my-groups" class="groups-content hidden">
+                            <div id="my-groups-list" class="groups-grid">
+                                <!-- My groups will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div id="group-detail" class="group-detail hidden">
+                            <!-- Group detail view -->
                         </div>
                     </div>
+                    
+                    <!-- Crowdfunding Section -->
                     <div id="section-crowdfunding" class="hidden">
-                        <div class="empty-state">
-                            <div class="empty-state-icon">💰</div>
-                            <h3>Crowdfunding</h3>
-                            <p>Coming soon! Crowdfunding features are under development.</p>
+                        <div class="crowdfunding-header">
+                            <div class="groups-tabs">
+                                <button class="groups-tab active" onclick="showCrowdfundingTab('discover')">Discover Campaigns</button>
+                                <button class="groups-tab" onclick="showCrowdfundingTab('my-campaigns')">My Campaigns</button>
+                            </div>
+                            <button class="btn btn-primary" onclick="showCreateCampaignModal()">+ Start Campaign</button>
+                        </div>
+                        
+                        <div id="campaigns-discover" class="campaigns-content">
+                            <div class="campaigns-categories">
+                                <button class="category-btn active" onclick="filterCampaigns('all')">All</button>
+                                <button class="category-btn" onclick="filterCampaigns('Environment')">Environment</button>
+                                <button class="category-btn" onclick="filterCampaigns('Education')">Education</button>
+                                <button class="category-btn" onclick="filterCampaigns('Healthcare')">Healthcare</button>
+                                <button class="category-btn" onclick="filterCampaigns('Community')">Community</button>
+                            </div>
+                            <div id="campaigns-list" class="campaigns-grid">
+                                <!-- Campaigns will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div id="campaigns-my-campaigns" class="campaigns-content hidden">
+                            <div id="my-campaigns-list" class="campaigns-grid">
+                                <!-- My campaigns will be loaded here -->
+                            </div>
                         </div>
                     </div>
                     <div id="section-messages" class="hidden">
@@ -1716,10 +2228,498 @@
             return div.innerHTML;
         }
 
+        // ===================
+        // GROUPS FUNCTIONALITY
+        // ===================
+        let groups = [];
+        let myGroups = [];
+        let currentGroupFilter = 'all';
+        let currentGroup = null;
+
+        function showGroupsTab(tab) {
+            document.querySelectorAll('.groups-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('groups-discover').classList.toggle('hidden', tab !== 'discover');
+            document.getElementById('groups-my-groups').classList.toggle('hidden', tab !== 'my-groups');
+            document.getElementById('group-detail').classList.add('hidden');
+            
+            if (tab === 'discover') {
+                loadGroups();
+            } else {
+                loadMyGroups();
+            }
+        }
+
+        async function loadGroups() {
+            const container = document.getElementById('groups-list');
+            container.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Loading groups...</div>';
+            
+            try {
+                const data = await apiCall('/groups');
+                groups = data.groups || [];
+                renderGroups(groups);
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">👥</div>
+                        <h3>No groups yet</h3>
+                        <p>Be the first to create a group!</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadMyGroups() {
+            const container = document.getElementById('my-groups-list');
+            container.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Loading your groups...</div>';
+            
+            try {
+                const data = await apiCall('/groups/my-groups');
+                myGroups = data.groups || [];
+                renderGroups(myGroups, 'my-groups-list');
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">👥</div>
+                        <h3>No groups yet</h3>
+                        <p>Join or create a group to get started!</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderGroups(groupsToRender, containerId = 'groups-list') {
+            const container = document.getElementById(containerId);
+            
+            if (!groupsToRender || groupsToRender.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">👥</div>
+                        <h3>No groups found</h3>
+                        <p>Try a different search or create your own!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = groupsToRender.map(group => `
+                <div class="group-card">
+                    <div class="group-cover">
+                        ${group.coverImage ? `<img src="${group.coverImage}" alt="${group.name}">` : '👥'}
+                    </div>
+                    <div class="group-info">
+                        <div class="group-name">${escapeHtml(group.name)}</div>
+                        <div class="group-description">${escapeHtml(group.description || '')}</div>
+                        <div class="group-stats">
+                            <span>👥 ${group.memberCount || 0} members</span>
+                            <span>📝 ${group.postCount || 0} posts</span>
+                        </div>
+                        <div class="group-actions">
+                            <button class="btn-join ${group.isMember ? 'joined' : ''}" onclick="toggleGroupMembership('${group._id || group.id}', ${group.isMember})">
+                                ${group.isMember ? '✓ Joined' : 'Join Group'}
+                            </button>
+                            <button class="btn-view" onclick="viewGroup('${group._id || group.id}')">View</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterGroups(category) {
+            currentGroupFilter = category;
+            document.querySelectorAll('.groups-categories .category-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase().includes(category.toLowerCase()) || (category === 'all' && btn.textContent === 'All'));
+            });
+            
+            if (category === 'all') {
+                renderGroups(groups);
+            } else {
+                const filtered = groups.filter(g => g.category === category);
+                renderGroups(filtered);
+            }
+        }
+
+        function searchGroups(event) {
+            const query = event.target.value.toLowerCase();
+            if (!query) {
+                renderGroups(groups);
+                return;
+            }
+            const filtered = groups.filter(g => 
+                g.name.toLowerCase().includes(query) || 
+                (g.description && g.description.toLowerCase().includes(query))
+            );
+            renderGroups(filtered);
+        }
+
+        async function toggleGroupMembership(groupId, isMember) {
+            try {
+                if (isMember) {
+                    await apiCall(`/groups/${groupId}/leave`, { method: 'POST' });
+                } else {
+                    await apiCall(`/groups/${groupId}/join`, { method: 'POST' });
+                }
+                loadGroups();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function viewGroup(groupId) {
+            try {
+                const data = await apiCall(`/groups/${groupId}`);
+                currentGroup = data.group;
+                renderGroupDetail(currentGroup);
+            } catch (error) {
+                alert('Error loading group: ' + error.message);
+            }
+        }
+
+        function renderGroupDetail(group) {
+            document.getElementById('groups-discover').classList.add('hidden');
+            document.getElementById('groups-my-groups').classList.add('hidden');
+            
+            const container = document.getElementById('group-detail');
+            container.classList.remove('hidden');
+            
+            container.innerHTML = `
+                <button class="back-btn" onclick="backToGroups()">← Back to Groups</button>
+                <div class="group-detail-header">
+                    <div class="group-detail-cover" style="${group.coverImage ? `background-image: url(${group.coverImage}); background-size: cover;` : ''}"></div>
+                    <div class="group-detail-info">
+                        <div>
+                            <h2 class="group-detail-name">${escapeHtml(group.name)}</h2>
+                            <p class="group-detail-meta">
+                                ${group.privacy === 'private' ? '🔒 Private' : '🌐 Public'} • 
+                                ${group.memberCount || 0} members • 
+                                ${group.category || 'General'}
+                            </p>
+                            <p style="margin-top: 12px; color: var(--text-muted);">${escapeHtml(group.description || '')}</p>
+                        </div>
+                        <button class="btn-join ${group.isMember ? 'joined' : ''}" onclick="toggleGroupMembership('${group._id || group.id}', ${group.isMember})">
+                            ${group.isMember ? '✓ Joined' : 'Join Group'}
+                        </button>
+                    </div>
+                </div>
+                <div class="group-posts">
+                    <h3 style="margin-bottom: 16px;">Group Posts</h3>
+                    ${group.isMember ? `
+                        <div class="create-post" style="margin-bottom: 24px;">
+                            <textarea id="group-post-content" placeholder="Share something with the group..." style="width: 100%; padding: 12px; background: var(--surface-light); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Open Sans', sans-serif; min-height: 80px; resize: none;"></textarea>
+                            <button class="btn btn-primary" style="margin-top: 12px;" onclick="createGroupPost('${group._id || group.id}')">Post</button>
+                        </div>
+                    ` : '<p style="color: var(--text-muted); margin-bottom: 16px;">Join this group to post content.</p>'}
+                    <div id="group-posts-list">
+                        ${(group.recentPosts && group.recentPosts.length > 0) ? 
+                            group.recentPosts.map(post => `
+                                <div class="post-card" style="margin-bottom: 16px;">
+                                    <div class="post-header">
+                                        <div class="post-avatar">${getInitials(post.author?.name || 'User')}</div>
+                                        <div>
+                                            <div class="post-author-name">${post.author?.name || 'User'}</div>
+                                            <div class="post-meta">${formatTime(post.createdAt)}</div>
+                                        </div>
+                                    </div>
+                                    <div class="post-content">${escapeHtml(post.content)}</div>
+                                </div>
+                            `).join('') : 
+                            '<p style="color: var(--text-muted); text-align: center; padding: 40px;">No posts yet in this group.</p>'
+                        }
+                    </div>
+                </div>
+            `;
+        }
+
+        function backToGroups() {
+            document.getElementById('group-detail').classList.add('hidden');
+            document.getElementById('groups-discover').classList.remove('hidden');
+            loadGroups();
+        }
+
+        async function createGroupPost(groupId) {
+            const content = document.getElementById('group-post-content').value.trim();
+            if (!content) return;
+            
+            try {
+                await apiCall('/posts', {
+                    method: 'POST',
+                    body: JSON.stringify({ content, group: groupId })
+                });
+                document.getElementById('group-post-content').value = '';
+                viewGroup(groupId);
+            } catch (error) {
+                alert('Error creating post: ' + error.message);
+            }
+        }
+
+        function showCreateGroupModal() {
+            document.getElementById('create-group-modal').classList.remove('hidden');
+        }
+
+        function hideCreateGroupModal() {
+            document.getElementById('create-group-modal').classList.add('hidden');
+            document.getElementById('create-group-form').reset();
+        }
+
+        async function handleCreateGroup(event) {
+            event.preventDefault();
+            const errorDiv = document.getElementById('group-error');
+            
+            try {
+                const data = await apiCall('/groups', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        name: document.getElementById('group-name').value,
+                        description: document.getElementById('group-description').value,
+                        category: document.getElementById('group-category').value,
+                        privacy: document.getElementById('group-privacy').value
+                    })
+                });
+                
+                hideCreateGroupModal();
+                loadGroups();
+                alert('Group created successfully!');
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        // ===================
+        // CROWDFUNDING FUNCTIONALITY
+        // ===================
+        let campaigns = [];
+        let myCampaigns = [];
+        let currentCampaignFilter = 'all';
+
+        function showCrowdfundingTab(tab) {
+            document.querySelectorAll('#section-crowdfunding .groups-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('campaigns-discover').classList.toggle('hidden', tab !== 'discover');
+            document.getElementById('campaigns-my-campaigns').classList.toggle('hidden', tab !== 'my-campaigns');
+            
+            if (tab === 'discover') {
+                loadCampaigns();
+            } else {
+                loadMyCampaigns();
+            }
+        }
+
+        async function loadCampaigns() {
+            const container = document.getElementById('campaigns-list');
+            container.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Loading campaigns...</div>';
+            
+            try {
+                const data = await apiCall('/campaigns');
+                campaigns = data.campaigns || [];
+                renderCampaigns(campaigns);
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💰</div>
+                        <h3>No campaigns yet</h3>
+                        <p>Be the first to start a campaign!</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadMyCampaigns() {
+            const container = document.getElementById('my-campaigns-list');
+            container.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Loading your campaigns...</div>';
+            
+            try {
+                const data = await apiCall('/campaigns/my-campaigns');
+                myCampaigns = data.campaigns || [];
+                renderCampaigns(myCampaigns, 'my-campaigns-list');
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💰</div>
+                        <h3>No campaigns yet</h3>
+                        <p>Start a campaign to make a difference!</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderCampaigns(campaignsToRender, containerId = 'campaigns-list') {
+            const container = document.getElementById(containerId);
+            
+            if (!campaignsToRender || campaignsToRender.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💰</div>
+                        <h3>No campaigns found</h3>
+                        <p>Check back later or start your own!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = campaignsToRender.map(campaign => {
+                const progress = Math.min(100, Math.round((campaign.currentAmount || 0) / (campaign.goalAmount || 1) * 100));
+                const daysLeft = campaign.endDate ? Math.max(0, Math.ceil((new Date(campaign.endDate) - new Date()) / 86400000)) : 0;
+                
+                return `
+                    <div class="campaign-card">
+                        <div class="campaign-cover">
+                            ${campaign.image ? `<img src="${campaign.image}" alt="${campaign.title}">` : '💰'}
+                        </div>
+                        <div class="campaign-info">
+                            <div class="campaign-title">${escapeHtml(campaign.title)}</div>
+                            <div class="campaign-description">${escapeHtml(campaign.description || '')}</div>
+                            <div class="campaign-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${progress}%"></div>
+                                </div>
+                                <div class="progress-text">
+                                    <span class="progress-raised">$${(campaign.currentAmount || 0).toLocaleString()}</span>
+                                    <span class="progress-goal">of $${(campaign.goalAmount || 0).toLocaleString()}</span>
+                                </div>
+                            </div>
+                            <div class="campaign-stats">
+                                <span>👥 ${campaign.donorCount || 0} backers</span>
+                                <span>⏱️ ${daysLeft} days left</span>
+                            </div>
+                            <div class="campaign-actions">
+                                <button class="btn-donate" onclick="showDonateModal('${campaign._id || campaign.id}', '${escapeHtml(campaign.title)}')">Donate Now</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterCampaigns(category) {
+            currentCampaignFilter = category;
+            document.querySelectorAll('.campaigns-categories .category-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent === category || (category === 'all' && btn.textContent === 'All'));
+            });
+            
+            if (category === 'all') {
+                renderCampaigns(campaigns);
+            } else {
+                const filtered = campaigns.filter(c => c.category === category);
+                renderCampaigns(filtered);
+            }
+        }
+
+        function showCreateCampaignModal() {
+            document.getElementById('create-campaign-modal').classList.remove('hidden');
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('campaign-end-date').setAttribute('min', today);
+        }
+
+        function hideCreateCampaignModal() {
+            document.getElementById('create-campaign-modal').classList.add('hidden');
+            document.getElementById('create-campaign-form').reset();
+        }
+
+        async function handleCreateCampaign(event) {
+            event.preventDefault();
+            const errorDiv = document.getElementById('campaign-error');
+            
+            try {
+                const data = await apiCall('/campaigns', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        title: document.getElementById('campaign-title').value,
+                        description: document.getElementById('campaign-description').value,
+                        category: document.getElementById('campaign-category').value,
+                        goalAmount: parseInt(document.getElementById('campaign-goal').value),
+                        endDate: document.getElementById('campaign-end-date').value
+                    })
+                });
+                
+                hideCreateCampaignModal();
+                loadCampaigns();
+                alert('Campaign created successfully!');
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        function showDonateModal(campaignId, campaignTitle) {
+            document.getElementById('donate-campaign-id').value = campaignId;
+            document.getElementById('donate-campaign-title').textContent = campaignTitle;
+            document.getElementById('donate-modal').classList.remove('hidden');
+        }
+
+        function hideDonateModal() {
+            document.getElementById('donate-modal').classList.add('hidden');
+            document.getElementById('donate-form').reset();
+        }
+
+        function setDonationAmount(amount) {
+            document.getElementById('donate-amount').value = amount;
+        }
+
+        async function handleDonate(event) {
+            event.preventDefault();
+            const campaignId = document.getElementById('donate-campaign-id').value;
+            const amount = parseInt(document.getElementById('donate-amount').value);
+            const errorDiv = document.getElementById('donate-error');
+            
+            try {
+                // Create payment intent
+                const data = await apiCall(`/campaigns/${campaignId}/donate`, {
+                    method: 'POST',
+                    body: JSON.stringify({ amount })
+                });
+                
+                if (data.url) {
+                    // Redirect to Stripe checkout
+                    window.location.href = data.url;
+                } else {
+                    hideDonateModal();
+                    loadCampaigns();
+                    alert('Thank you for your donation!');
+                }
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        // Update showSection to load data
+        const originalShowSection = showSection;
+        showSection = function(section) {
+            originalShowSection(section);
+            
+            if (section === 'groups') {
+                loadGroups();
+            } else if (section === 'crowdfunding') {
+                loadCampaigns();
+            }
+        };
+
         // Close modal when clicking outside
         document.getElementById('auth-modal').addEventListener('click', (e) => {
             if (e.target.id === 'auth-modal') {
                 hideAuthModal();
+            }
+        });
+
+        document.getElementById('create-group-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'create-group-modal') {
+                hideCreateGroupModal();
+            }
+        });
+
+        document.getElementById('create-campaign-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'create-campaign-modal') {
+                hideCreateCampaignModal();
+            }
+        });
+
+        document.getElementById('donate-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'donate-modal') {
+                hideDonateModal();
             }
         });
     </script>
