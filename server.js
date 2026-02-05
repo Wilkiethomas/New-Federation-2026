@@ -11,27 +11,17 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
 
-// Import routes
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/users');
-const postRoutes = require('./routes/posts');
-const groupRoutes = require('./routes/groups');
-const campaignRoutes = require('./routes/campaigns');
-const paymentRoutes = require('./routes/payments');
-
 const app = express();
 
 // ===================
 // SECURITY MIDDLEWARE
 // ===================
 
-// Helmet for security headers (configured for serving frontend)
 app.use(helmet({
-  contentSecurityPolicy: false, // Disable CSP for now to allow inline scripts
+  contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false
 }));
 
-// CORS configuration
 app.use(cors({
   origin: process.env.FRONTEND_URL || '*',
   credentials: true,
@@ -39,10 +29,9 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 100,
   message: { error: 'Too many requests, please try again later.' }
 });
 app.use('/api/', limiter);
@@ -51,10 +40,7 @@ app.use('/api/', limiter);
 // BODY PARSING
 // ===================
 
-// Special handling for Stripe webhooks (needs raw body)
 app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
-
-// JSON parsing for all other routes
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
@@ -62,8 +48,49 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // STATIC FILES (Frontend)
 // ===================
 
-// Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
+
+// ===================
+// DATABASE CONNECTION
+// ===================
+
+let dbConnected = false;
+let dbError = null;
+
+const connectDB = async () => {
+  try {
+    const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/wef_platform';
+    console.log('Attempting MongoDB connection...');
+    console.log('URI starts with:', mongoURI.substring(0, 30) + '...');
+    
+    await mongoose.connect(mongoURI, {
+      serverSelectionTimeoutMS: 10000,
+      connectTimeoutMS: 10000,
+    });
+    
+    dbConnected = true;
+    dbError = null;
+    console.log('✅ Connected to MongoDB');
+  } catch (error) {
+    dbConnected = false;
+    dbError = error.message;
+    console.error('❌ MongoDB connection error:', error.message);
+    // Don't crash - keep server running so we can debug
+    setTimeout(connectDB, 10000);
+  }
+};
+
+mongoose.connection.on('disconnected', () => {
+  console.log('MongoDB disconnected. Attempting reconnect...');
+  dbConnected = false;
+  setTimeout(connectDB, 5000);
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB error:', err.message);
+  dbConnected = false;
+  dbError = err.message;
+});
 
 // ===================
 // API ROUTES
@@ -74,17 +101,58 @@ app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'healthy', 
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
+    database: dbConnected ? 'connected' : 'disconnected',
+    dbError: dbError
   });
 });
 
-// API routes
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/posts', postRoutes);
-app.use('/api/groups', groupRoutes);
-app.use('/api/campaigns', campaignRoutes);
-app.use('/api/payments', paymentRoutes);
+// Debug endpoint
+app.get('/api/debug', (req, res) => {
+  res.json({
+    nodeVersion: process.version,
+    dbConnected: dbConnected,
+    dbError: dbError,
+    mongooseState: mongoose.connection.readyState,
+    envVarsSet: {
+      MONGODB_URI: !!process.env.MONGODB_URI,
+      JWT_SECRET: !!process.env.JWT_SECRET,
+      STRIPE_SECRET_KEY: !!process.env.STRIPE_SECRET_KEY,
+      STRIPE_PUBLISHABLE_KEY: !!process.env.STRIPE_PUBLISHABLE_KEY,
+      STRIPE_WEBHOOK_SECRET: !!process.env.STRIPE_WEBHOOK_SECRET,
+      FRONTEND_URL: !!process.env.FRONTEND_URL,
+      NODE_ENV: process.env.NODE_ENV
+    }
+  });
+});
+
+// Import and use routes
+try {
+  const authRoutes = require('./routes/auth');
+  const userRoutes = require('./routes/users');
+  const postRoutes = require('./routes/posts');
+  const groupRoutes = require('./routes/groups');
+  const campaignRoutes = require('./routes/campaigns');
+  const paymentRoutes = require('./routes/payments');
+
+  app.use('/api/auth', authRoutes);
+  app.use('/api/users', userRoutes);
+  app.use('/api/posts', postRoutes);
+  app.use('/api/groups', groupRoutes);
+  app.use('/api/campaigns', campaignRoutes);
+  app.use('/api/payments', paymentRoutes);
+  
+  console.log('✅ All routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading routes:', error.message);
+  
+  app.use('/api/*', (req, res) => {
+    res.status(500).json({ 
+      error: 'Server configuration error',
+      details: error.message
+    });
+  });
+}
 
 // API 404 handler
 app.use('/api/*', (req, res) => {
@@ -95,7 +163,6 @@ app.use('/api/*', (req, res) => {
 // FRONTEND ROUTES
 // ===================
 
-// Serve frontend for all non-API routes (SPA support)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -104,23 +171,19 @@ app.get('*', (req, res) => {
 // ERROR HANDLING
 // ===================
 
-// Global error handler
 app.use((err, req, res, next) => {
   console.error('Error:', err);
   
-  // Mongoose validation error
   if (err.name === 'ValidationError') {
     const errors = Object.values(err.errors).map(e => e.message);
     return res.status(400).json({ error: 'Validation failed', details: errors });
   }
   
-  // Mongoose duplicate key error
   if (err.code === 11000) {
     const field = Object.keys(err.keyValue)[0];
     return res.status(400).json({ error: `${field} already exists` });
   }
   
-  // JWT errors
   if (err.name === 'JsonWebTokenError') {
     return res.status(401).json({ error: 'Invalid token' });
   }
@@ -129,28 +192,10 @@ app.use((err, req, res, next) => {
     return res.status(401).json({ error: 'Token expired' });
   }
   
-  // Default error
   res.status(err.status || 500).json({ 
-    error: process.env.NODE_ENV === 'production' 
-      ? 'Something went wrong' 
-      : err.message 
+    error: err.message || 'Something went wrong'
   });
 });
-
-// ===================
-// DATABASE CONNECTION
-// ===================
-
-const connectDB = async () => {
-  try {
-    const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/wef_platform';
-    await mongoose.connect(mongoURI);
-    console.log('✅ Connected to MongoDB');
-  } catch (error) {
-    console.error('❌ MongoDB connection error:', error.message);
-    process.exit(1);
-  }
-};
 
 // ===================
 // START SERVER
@@ -159,14 +204,14 @@ const connectDB = async () => {
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
-  await connectDB();
-  
+  // Start server first so it responds to health checks
   app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
-    console.log(`🌐 Frontend: http://localhost:${PORT}`);
-    console.log(`🔌 API: http://localhost:${PORT}/api`);
   });
+  
+  // Then connect to database
+  await connectDB();
 };
 
 startServer();
