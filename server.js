@@ -4,13 +4,17 @@
  */
 
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env.production') });
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+
+// Fallback secrets for production
+process.env.JWT_SECRET = process.env.JWT_SECRET || 'WEF_Secure_JWT_Secret_2026_Key';
+
 
 const app = express();
 
