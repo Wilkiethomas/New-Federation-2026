@@ -64,7 +64,7 @@ let dbError = null;
 
 const connectDB = async () => {
   try {
-    const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://wef_admin:WefSecure2026Pass@cluster0.rnscxzo.mongodb.net/wef_platform?retryWrites=true&w=majority';  
+    const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://wef_admin:WefSecure2026@cluster0.rnscxzo.mongodb.net/wef_platform?=Cluster0';  
     console.log('Attempting MongoDB connection...');
     console.log('URI starts with:', mongoURI.substring(0, 30) + '...');
     
