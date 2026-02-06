@@ -4,13 +4,13 @@
  */
 
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config({ path: path.join(__dirname, '.env.production') });
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const path = require('path');
 
 const app = express();
 
@@ -60,7 +60,7 @@ let dbError = null;
 
 const connectDB = async () => {
   try {
-    const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/wef_platform';
+    const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://wef_admin:WefSecure2026Pass@cluster0.rnscxzo.mongodb.net/wef_platform?retryWrites=true&w=majority';  
     console.log('Attempting MongoDB connection...');
     console.log('URI starts with:', mongoURI.substring(0, 30) + '...');
     
