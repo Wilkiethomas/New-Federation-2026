@@ -80,8 +80,32 @@ router.get('/:id', optionalAuth, async (req, res) => {
       return res.status(403).json({ error: 'This group is private' });
     }
     
-    res.json({ group: group.toPublicGroup(req.userId) });
+    // Fetch recent posts for this group
+    const recentPosts = await Post.find({ group: req.params.id, isDeleted: false })
+      .sort({ createdAt: -1 })
+      .limit(20)
+      .populate('author', 'name avatar role');
+    
+    // Build response with recentPosts included
+    const groupData = group.toPublicGroup(req.userId);
+    const response = {
+      ...groupData,
+      recentPosts: recentPosts.map(p => {
+        if (p.toFeedItem) {
+          return p.toFeedItem(req.userId);
+        }
+        return {
+          id: p._id,
+          content: p.content,
+          author: p.author,
+          createdAt: p.createdAt
+        };
+      })
+    };
+    
+    res.json({ group: response });
   } catch (error) {
+    console.error('Get group error:', error);
     res.status(500).json({ error: 'Failed to get group.' });
   }
 });
