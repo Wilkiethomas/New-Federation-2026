@@ -177,7 +177,7 @@ postSchema.methods.isBookmarkedBy = function(userId) {
   return this.bookmarkedBy.some(id => id.toString() === userId.toString());
 };
 
-// Format for API response
+// Format for API response - NOW INCLUDES COMMENTS
 postSchema.methods.toFeedItem = function(currentUserId) {
   return {
     id: this._id,
@@ -189,6 +189,7 @@ postSchema.methods.toFeedItem = function(currentUserId) {
     likeCount: this.likeCount,
     commentCount: this.commentCount,
     shareCount: this.shareCount,
+    comments: this.comments || [], // Include comments array for frontend
     liked: currentUserId ? this.isLikedBy(currentUserId) : false,
     bookmarked: currentUserId ? this.isBookmarkedBy(currentUserId) : false,
     visibility: this.visibility,
@@ -204,8 +205,33 @@ postSchema.methods.toFeedItem = function(currentUserId) {
 // STATICS
 // ===================
 
-// Get feed for a user (posts from people they follow)
+/**
+ * GLOBAL FEED - Shows ALL public posts from ALL users
+ * Similar to Instagram/Twitter/Facebook explore feed
+ */
 postSchema.statics.getFeed = async function(userId, page = 1, limit = 20) {
+  const skip = (page - 1) * limit;
+  
+  // Show ALL public posts from ALL users (global feed)
+  const posts = await this.find({
+    isDeleted: false,
+    visibility: 'public',
+    group: null // Exclude group posts from main feed
+  })
+  .sort({ isPinned: -1, createdAt: -1 })
+  .skip(skip)
+  .limit(limit)
+  .populate('author', 'name avatar role')
+  .populate('comments.author', 'name avatar');
+  
+  return posts;
+};
+
+/**
+ * PERSONALIZED FEED - Shows posts from people user follows
+ * Can be used for "Following" tab in the future
+ */
+postSchema.statics.getPersonalizedFeed = async function(userId, page = 1, limit = 20) {
   const User = mongoose.model('User');
   const user = await User.findById(userId).select('following');
   
@@ -218,7 +244,7 @@ postSchema.statics.getFeed = async function(userId, page = 1, limit = 20) {
     author: { $in: followingIds },
     isDeleted: false,
     visibility: { $in: ['public', 'followers'] },
-    group: null // Exclude group posts from main feed
+    group: null
   })
   .sort({ isPinned: -1, createdAt: -1 })
   .skip(skip)
@@ -229,7 +255,9 @@ postSchema.statics.getFeed = async function(userId, page = 1, limit = 20) {
   return posts;
 };
 
-// Get trending posts (most engagement in last 24 hours)
+/**
+ * Get trending posts (most engagement in last 24 hours)
+ */
 postSchema.statics.getTrending = async function(limit = 10) {
   const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
   
