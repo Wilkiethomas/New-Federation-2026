@@ -959,6 +959,114 @@
             color: var(--accent);
         }
 
+        /* Comments Section */
+        .post-comments {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .comment-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comment-item:last-of-type {
+            border-bottom: none;
+        }
+
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+            flex-shrink: 0;
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .comment-text {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text);
+        }
+
+        .comment-time {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .comment-input-wrapper {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 10px 14px;
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text);
+            font-size: 14px;
+            font-family: 'Open Sans', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .comment-input::placeholder {
+            color: #5a8aa8;
+        }
+
+        .btn-comment {
+            padding: 10px 20px;
+            background: var(--secondary);
+            border: none;
+            border-radius: 20px;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-comment:hover {
+            background: var(--secondary-light);
+        }
+
+        .no-comments {
+            color: var(--text-muted);
+            font-size: 14px;
+            padding: 12px 0;
+            text-align: center;
+        }
+
         /* Loading */
         .loading {
             text-align: center;
@@ -1894,6 +2002,7 @@
         let authMode = 'login';
         let selectedTier = 'free';
         let posts = [];
+        let expandedComments = {}; // Track which posts have comments expanded
 
         // =================== 
         // Initialize
@@ -2009,6 +2118,58 @@
                 }
             } catch (error) {
                 console.error('Like error:', error);
+            }
+        }
+
+        // Toggle comments visibility
+        function toggleComments(postId) {
+            expandedComments[postId] = !expandedComments[postId];
+            renderPosts();
+        }
+
+        // Add a comment to a post
+        async function addComment(postId) {
+            const input = document.getElementById(`comment-input-${postId}`);
+            const content = input.value.trim();
+            if (!content) return;
+            
+            try {
+                const data = await apiCall(`/posts/${postId}/comment`, {
+                    method: 'POST',
+                    body: JSON.stringify({ content })
+                });
+                
+                // Update the post with new comment
+                const post = posts.find(p => p.id === postId);
+                if (post) {
+                    if (!post.comments) post.comments = [];
+                    post.comments.push(data.comment);
+                    post.commentCount = data.commentCount;
+                    renderPosts();
+                }
+                
+            } catch (error) {
+                console.error('Comment error:', error);
+                alert('Failed to add comment: ' + error.message);
+            }
+        }
+
+        // Share a post
+        async function sharePost(postId) {
+            try {
+                const data = await apiCall(`/posts/${postId}/share`, {
+                    method: 'POST'
+                });
+                
+                const post = posts.find(p => p.id === postId);
+                if (post) {
+                    post.shareCount = data.shareCount;
+                    renderPosts();
+                }
+                
+                alert('Post shared successfully!');
+            } catch (error) {
+                console.error('Share error:', error);
             }
         }
 
@@ -2168,7 +2329,11 @@
                 return;
             }
             
-            container.innerHTML = posts.map(post => `
+            container.innerHTML = posts.map(post => {
+                const isExpanded = expandedComments[post.id];
+                const comments = post.comments || [];
+                
+                return `
                 <div class="post-card">
                     <div class="post-header">
                         <div class="post-avatar">${getInitials(post.author?.name || 'User')}</div>
@@ -2186,12 +2351,36 @@
                         <button class="post-action ${post.liked ? 'liked' : ''}" onclick="likePost('${post.id}')">
                             ${post.liked ? '❤️' : '🤍'} ${post.likeCount || 0}
                         </button>
-                        <button class="post-action">💬 ${post.commentCount || 0}</button>
-                        <button class="post-action">🔄 ${post.shareCount || 0}</button>
+                        <button class="post-action" onclick="toggleComments('${post.id}')">
+                            💬 ${post.commentCount || 0}
+                        </button>
+                        <button class="post-action" onclick="sharePost('${post.id}')">
+                            🔄 ${post.shareCount || 0}
+                        </button>
                         <button class="post-action" style="margin-left:auto">🔖</button>
                     </div>
+                    ${isExpanded ? `
+                        <div class="post-comments">
+                            ${comments.length > 0 ? comments.map(comment => `
+                                <div class="comment-item">
+                                    <div class="comment-avatar">${getInitials(comment.author?.name || 'User')}</div>
+                                    <div class="comment-content">
+                                        <div class="comment-author">${comment.author?.name || 'User'}</div>
+                                        <div class="comment-text">${escapeHtml(comment.content)}</div>
+                                        <div class="comment-time">${formatTime(comment.createdAt)}</div>
+                                    </div>
+                                </div>
+                            `).join('') : '<p class="no-comments">No comments yet. Be the first to comment!</p>'}
+                            <div class="comment-input-wrapper">
+                                <input type="text" class="comment-input" id="comment-input-${post.id}" 
+                                       placeholder="Write a comment..." 
+                                       onkeypress="if(event.key==='Enter') addComment('${post.id}')">
+                                <button class="btn-comment" onclick="addComment('${post.id}')">Post</button>
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         // =================== 
