@@ -2572,6 +2572,9 @@
             const container = document.getElementById('group-detail');
             container.classList.remove('hidden');
             
+            // Store group posts in a variable for interaction
+            const groupPosts = group.recentPosts || [];
+            
             container.innerHTML = `
                 <button class="back-btn" onclick="backToGroups()">← Back to Groups</button>
                 <div class="group-detail-header">
@@ -2600,8 +2603,13 @@
                         </div>
                     ` : '<p style="color: var(--text-muted); margin-bottom: 16px;">Join this group to post content.</p>'}
                     <div id="group-posts-list">
-                        ${(group.recentPosts && group.recentPosts.length > 0) ? 
-                            group.recentPosts.map(post => `
+                        ${groupPosts.length > 0 ? 
+                            groupPosts.map(post => {
+                                const postId = post.id || post._id;
+                                const isExpanded = expandedComments[postId];
+                                const comments = post.comments || [];
+                                
+                                return `
                                 <div class="post-card" style="margin-bottom: 16px;">
                                     <div class="post-header">
                                         <div class="post-avatar">${getInitials(post.author?.name || 'User')}</div>
@@ -2611,8 +2619,40 @@
                                         </div>
                                     </div>
                                     <div class="post-content">${escapeHtml(post.content)}</div>
+                                    <div class="post-actions">
+                                        <button class="post-action ${post.liked ? 'liked' : ''}" onclick="likeGroupPost('${postId}')">
+                                            ${post.liked ? '❤️' : '🤍'} ${post.likeCount || 0}
+                                        </button>
+                                        <button class="post-action" onclick="toggleGroupComments('${postId}')">
+                                            💬 ${post.commentCount || 0}
+                                        </button>
+                                        <button class="post-action" onclick="shareGroupPost('${postId}')">
+                                            🔄 ${post.shareCount || 0}
+                                        </button>
+                                        <button class="post-action" style="margin-left:auto">🔖</button>
+                                    </div>
+                                    ${isExpanded ? `
+                                        <div class="post-comments">
+                                            ${comments.length > 0 ? comments.map(comment => `
+                                                <div class="comment-item">
+                                                    <div class="comment-avatar">${getInitials(comment.author?.name || 'User')}</div>
+                                                    <div class="comment-content">
+                                                        <div class="comment-author">${comment.author?.name || 'User'}</div>
+                                                        <div class="comment-text">${escapeHtml(comment.content)}</div>
+                                                        <div class="comment-time">${formatTime(comment.createdAt)}</div>
+                                                    </div>
+                                                </div>
+                                            `).join('') : '<p class="no-comments">No comments yet. Be the first to comment!</p>'}
+                                            <div class="comment-input-wrapper">
+                                                <input type="text" class="comment-input" id="group-comment-input-${postId}" 
+                                                       placeholder="Write a comment..." 
+                                                       onkeypress="if(event.key==='Enter') addGroupComment('${postId}')">
+                                                <button class="btn-comment" onclick="addGroupComment('${postId}')">Post</button>
+                                            </div>
+                                        </div>
+                                    ` : ''}
                                 </div>
-                            `).join('') : 
+                            `}).join('') : 
                             '<p style="color: var(--text-muted); text-align: center; padding: 40px;">No posts yet in this group.</p>'
                         }
                     </div>
@@ -2639,6 +2679,84 @@
                 viewGroup(groupId);
             } catch (error) {
                 alert('Error creating post: ' + error.message);
+            }
+        }
+
+        // Like a group post
+        async function likeGroupPost(postId) {
+            try {
+                const data = await apiCall(`/posts/${postId}/like`, {
+                    method: 'POST'
+                });
+                
+                // Update the post in currentGroup
+                if (currentGroup && currentGroup.recentPosts) {
+                    const post = currentGroup.recentPosts.find(p => (p.id || p._id) === postId);
+                    if (post) {
+                        post.liked = data.liked;
+                        post.likeCount = data.likeCount;
+                        renderGroupDetail(currentGroup);
+                    }
+                }
+            } catch (error) {
+                console.error('Like error:', error);
+            }
+        }
+
+        // Toggle comments visibility for group post
+        function toggleGroupComments(postId) {
+            expandedComments[postId] = !expandedComments[postId];
+            renderGroupDetail(currentGroup);
+        }
+
+        // Add comment to group post
+        async function addGroupComment(postId) {
+            const input = document.getElementById(`group-comment-input-${postId}`);
+            const content = input.value.trim();
+            if (!content) return;
+            
+            try {
+                const data = await apiCall(`/posts/${postId}/comment`, {
+                    method: 'POST',
+                    body: JSON.stringify({ content })
+                });
+                
+                // Update the post in currentGroup
+                if (currentGroup && currentGroup.recentPosts) {
+                    const post = currentGroup.recentPosts.find(p => (p.id || p._id) === postId);
+                    if (post) {
+                        if (!post.comments) post.comments = [];
+                        post.comments.push(data.comment);
+                        post.commentCount = data.commentCount;
+                        renderGroupDetail(currentGroup);
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Comment error:', error);
+                alert('Failed to add comment: ' + error.message);
+            }
+        }
+
+        // Share a group post
+        async function shareGroupPost(postId) {
+            try {
+                const data = await apiCall(`/posts/${postId}/share`, {
+                    method: 'POST'
+                });
+                
+                // Update the post in currentGroup
+                if (currentGroup && currentGroup.recentPosts) {
+                    const post = currentGroup.recentPosts.find(p => (p.id || p._id) === postId);
+                    if (post) {
+                        post.shareCount = data.shareCount;
+                        renderGroupDetail(currentGroup);
+                    }
+                }
+                
+                alert('Post shared successfully!');
+            } catch (error) {
+                console.error('Share error:', error);
             }
         }
 
